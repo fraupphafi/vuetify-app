@@ -1,11 +1,10 @@
 <template>
     <div class="filter-block">
-        2233
-        <template>
-        <v-chip>
-            1236655
-        </v-chip>
-        </template>
+        <v-combobox
+            v-model="model"
+            >
+
+        </v-combobox>
     </div>
     
 </template>
@@ -19,7 +18,12 @@ export default {
     name: "CustomFilter",
     props: [
         'outlets'
-    ]
+    ],
+    data() {
+        return {
+            model: ['test data']
+        }
+    }
 
 }
 </script>
