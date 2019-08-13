@@ -19,6 +19,10 @@
 <script>
 import router from '../router.js';
 import { mapMutations } from 'vuex';
+
+import VueforBus from "vue";
+const EventBus = new VueforBus();
+
 export default {
     name: 'OutletsList',
     props: ['outlets', 'center'],

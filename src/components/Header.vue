@@ -24,11 +24,13 @@
 </template>
 
 <script>
+import { GlobalBus } from '../GlobalBus.js';
+
 export default {
     name: 'Header',
     methods: { 
         log() {
-            console.log('filter click');
+            GlobalBus.$emit('changeShowFilters');
         }
     }
 }

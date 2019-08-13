@@ -1,7 +1,7 @@
 <template>
     <div class="outlets-map">
-        <Header transition="slide" />
-        <CustomFilter :outlets="outlets"/>
+        <Header/>
+        <CustomFilter v-if="showFilters" :outlets="outlets"/>
         <Map :outlets="outlets" :center="center"/>
         <OutletsList :outlets="outlets" :center="center"/>
     </div>
@@ -13,7 +13,7 @@ import Map from '../components/Map.vue';
 import OutletsList from '../components/OutletsList.vue';
 import CustomFilter from '../components/CustomFilter.vue';
 
-
+import { GlobalBus } from '../GlobalBus.js';
 import { mapState } from 'vuex';
 import { mapGetters } from 'vuex';
 
@@ -25,6 +25,12 @@ export default {
         OutletsList,
         CustomFilter
     },
+    data() {
+        return {
+            showFilters: false,
+            GlobalBus: GlobalBus
+        }
+    },
     computed: {
         ...mapGetters([
             'outlets'
@@ -32,6 +38,14 @@ export default {
         ...mapState([
             'center'
         ])
+    },
+    methods: {
+        toggleShowFilters() {
+            this.showFilters = !this.showFilters;
+        }
+    },
+    mounted() {
+        this.GlobalBus.$on('changeShowFilters', this.toggleShowFilters);
     }
 }
 </script>
