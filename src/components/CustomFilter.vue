@@ -12,7 +12,9 @@
                 <v-chip
                     v-bind="data.attrs"
                     :input-value="data.selected"
+                    draggable
                     close
+                    filter
                     @click="data.select"
                     @click:close="remove(data.item)"
                     >
