@@ -1,6 +1,10 @@
 <template>
     <div id="map">
-        <l-map :zoom="zoom" :center="center" @click="log()" @update:center="centerUpdate" >
+        <l-map 
+            :zoom="zoom" 
+            :center="center" 
+            @update:center="centerUpdate" 
+            >
             <l-control-scale position="topright" :imperial="false" :metric="true"></l-control-scale>
             <l-tile-layer
                 :url="url" 
@@ -10,7 +14,7 @@
                 :lat-lng="outlet.coords" 
                 :key="index" 
                 :icon="icon"
-                @click="centerUpdate(outlet.coords); log(outlet.coords);"/>
+                @click="centerUpdate(outlet.coords)"/>
         </l-map>
     </div>
 </template>
@@ -18,14 +22,25 @@
 <script>
     import { LMap, LTileLayer, LMarker, LIcon, LControlScale } from "vue2-leaflet";
     import { latLng, icon  } from "leaflet";
-    import { mapMutations, mapGetters } from 'vuex';
-    import store from '../storage/store.js'
+    import VueforBus from "vue";
+    const EventBus = new VueforBus();
 
     export default {
         name: 'Map',
-        props: ['outlets', 'center'],
+          props: {
+            outlets: {
+                type: Array,
+                required: true,
+            },
+            center: {
+                required: true,
+            },
+            eventBus: {
+                type: Object,
+                default: EventBus,
+            },
+        },
         components: { LMap, LTileLayer, LMarker, LIcon, LControlScale },
-        store: store,
         data() {
             return {
                 zoom: 15,
@@ -40,12 +55,12 @@
             };
         },
         methods: {
-            log(coords) {
-                console.log('click', coords);
-            },
-            ...mapMutations([
-                'centerUpdate'
-            ])
+            // ...mapMutations([
+            //     'centerUpdate'
+            // ])
+            centerUpdate(coords) {
+                this.eventBus.$emit("changeCenter", coords);
+            }
         }
     }
 </script>

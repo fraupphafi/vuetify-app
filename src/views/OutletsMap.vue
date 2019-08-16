@@ -1,9 +1,11 @@
 <template>
     <div class="outlets-map">
-        <Header/>
-        <CustomFilter v-if="showFilters" :outlets="outlets"/>
-        <Map :outlets="outlets" :center="center"/>
-        <OutletsList :outlets="outlets" :center="center"/>
+        <Header :eventBus="eventBus"/>
+        <div class="outlets-content">
+            <CustomFilter v-show="showFilters" :tags="tags" :eventBus="eventBus"/>
+            <Map :outlets="outlets" :center="center" :eventBus="eventBus"/>
+            <OutletsList :outlets="outlets" :center="center" :eventBus="eventBus"/>
+        </div>
     </div>
 </template>
 
@@ -13,9 +15,12 @@ import Map from '../components/Map.vue';
 import OutletsList from '../components/OutletsList.vue';
 import CustomFilter from '../components/CustomFilter.vue';
 
-import { GlobalBus } from '../GlobalBus.js';
+import VueforBus from "vue";
+const EventBus = new VueforBus();
+
 import { mapState } from 'vuex';
 import { mapGetters } from 'vuex';
+import { mapMutations } from 'vuex'; // одним импортом выдает ошибку
 
 export default {
     name: 'OutletsMap',
@@ -28,25 +33,46 @@ export default {
     data() {
         return {
             showFilters: false,
-            GlobalBus: GlobalBus
+            eventBus: EventBus,
+            tags: null,
+            center: this.$store.getters.getCenter
         }
     },
     computed: {
-        ...mapGetters([
-            'outlets'
-        ]),
-        ...mapState([
-            'center'
-        ])
+        // ...mapGetters([
+        //     'getFilteredOutlets'
+        // ]),
+        outlets() {
+            return this.$store.getters.getFilteredOutlets(this.tags);
+        }
     },
     methods: {
         toggleShowFilters() {
             this.showFilters = !this.showFilters;
         }
     },
-    mounted() {
-        this.GlobalBus.$on('changeShowFilters', this.toggleShowFilters);
+    created() {
+        this.eventBus.$on('changeShowFilters', this.toggleShowFilters); // тут общаются вью и хедер
+        this.eventBus.$on('changeTags', (exportModel) => { // тут общаются вью и компонент фильтра
+            this.tags = exportModel;
+        });
+         this.eventBus.$on('changeCenter', (coords) => { // тут общаются вью и list
+             this.center = coords;
+        });
     }
 }
 </script>
+<style lang="scss">
+.outlets-map {
+    height: 100%;
+}
+
+.outlets-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #dadada;
+}
+
+</style>>
 

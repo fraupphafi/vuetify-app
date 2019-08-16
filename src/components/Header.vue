@@ -24,13 +24,20 @@
 </template>
 
 <script>
-import { GlobalBus } from '../GlobalBus.js';
+import VueforBus from "vue";
+const EventBus = new VueforBus();
 
 export default {
     name: 'Header',
+    props: {
+        eventBus: {
+            type: Object,
+            default: EventBus,
+        }
+    },
     methods: { 
         log() {
-            GlobalBus.$emit('changeShowFilters');
+            this.eventBus.$emit('changeShowFilters');
         }
     }
 }

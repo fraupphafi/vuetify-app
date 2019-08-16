@@ -2,11 +2,12 @@
     <div class="filter-block">
         <v-combobox
             v-model="model"
-            :items="items"
+            :items="getFilters"
             placeholder="Search + Filter"
             multiple
             clearable
             chips
+            v-on:change="exportTags()"
             >
             <template v-slot:selection="data">
                 <v-chip
@@ -30,11 +31,17 @@
 import VueforBus from "vue";
 const EventBus = new VueforBus();
 
+import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
+
 export default {
     name: "CustomFilter",
-    props: [
-        'outlets'
-    ],
+    props: {
+        eventBus: {
+            type: Object,
+            default: EventBus,
+        }
+    },
     data() {
         return {
             model: null
@@ -47,12 +54,21 @@ export default {
                 elems.push(element.id);
             });
             return elems;
-        }
+        },
+        ...mapGetters([
+            'getFilters'
+        ]),
     },
     methods: {
         remove(item) {
             const index = this.model.indexOf(item);
-            if (index >= 0) this.model.splice(index, 1)
+            if (index >= 0) this.model.splice(index, 1);
+
+            this.exportTags();
+        },
+        exportTags() {
+            let exportModel = this.model.length === 0 ? null : this.model;
+            this.eventBus.$emit("changeTags", exportModel);
         }
     }
 }
@@ -61,10 +77,8 @@ export default {
 <style lang="scss" scoped>
 .filter-block {
     padding: 0 32px;
-    position: absolute;
-    top: 100px;
+    position: relative;
     width: 100%;
-    height: calc(100% - 100px);
     background-color: rgba(255,255,255, 0.9);
     z-index: 5556;
 }

@@ -6,7 +6,7 @@
             class="outlets-list__item">
             <div @click="centerUpdate(outlet.coords)">
                 <span class="count">{{index + 1}}</span>
-                <p class="name">{{outlet.name}}</p>
+                <p class="name">{{outlet.name}} type:{{outlet.typett}}</p>
                 <p class="address">{{outlet.address}}</p>
             </div>
             <router-link :to="{ name: 'outlet-description', params: { id: outlet.id } }">
@@ -19,20 +19,35 @@
 <script>
 import router from '../router.js';
 import { mapMutations } from 'vuex';
-
 import VueforBus from "vue";
 const EventBus = new VueforBus();
 
 export default {
     name: 'OutletsList',
-    props: ['outlets', 'center'],
+    //props: ['outlets', 'center'],
+    props: {
+        outlets: {
+            type: Array,
+            required: true,
+        },
+        center: {
+            required: true,
+        },
+        eventBus: {
+            type: Object,
+            default: EventBus,
+        },
+    },
     methods: {
         log(coords) {
             console.log(`координаты точки: ${coords}`);
         },
-        ...mapMutations([
-            'centerUpdate'
-        ])
+        // ...mapMutations([
+        //     'centerUpdate'
+        // ])
+        centerUpdate(coords) {
+            this.eventBus.$emit("changeCenter", coords);
+        }
     }
 }
 </script>
