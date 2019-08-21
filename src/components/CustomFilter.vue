@@ -7,19 +7,22 @@
             multiple
             clearable
             chips
+            light
             v-on:change="exportTags()"
             >
             <template v-slot:selection="data">
                 <v-chip
                     v-bind="data.attrs"
                     :input-value="data.selected"
+                    :color="'#204969'"
                     draggable
                     close
                     filter
+                    dark
                     @click="data.select"
                     @click:close="remove(data.item)"
                     >
-                     {{ data.item }}
+                    {{ data.item }}
                 </v-chip>
             </template>
         </v-combobox>
@@ -79,7 +82,7 @@ export default {
     padding: 0 32px;
     position: relative;
     width: 100%;
-    background-color: rgba(255,255,255, 0.9);
+    background-color: #ffffff;
     z-index: 5556;
 }
 </style>

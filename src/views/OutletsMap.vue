@@ -1,8 +1,8 @@
 <template>
     <div class="outlets-map">
-        <Header :eventBus="eventBus"/>
+        <Header :eventBus="eventBus" :tags="tags"/>
         <div class="outlets-content">
-            <CustomFilter v-show="showFilters" :tags="tags" :eventBus="eventBus"/>
+            <!-- <CustomFilter v-show="showFilters" :tags="tags" :eventBus="eventBus"/> -->
             <Map :outlets="outlets" :center="center" :eventBus="eventBus"/>
             <OutletsList :outlets="outlets" :center="center" :eventBus="eventBus"/>
         </div>
@@ -13,7 +13,6 @@
 import Header from '../components/Header.vue';
 import Map from '../components/Map.vue';
 import OutletsList from '../components/OutletsList.vue';
-import CustomFilter from '../components/CustomFilter.vue';
 
 import VueforBus from "vue";
 const EventBus = new VueforBus();
@@ -27,32 +26,21 @@ export default {
     components: {
         Header,
         Map,
-        OutletsList,
-        CustomFilter
+        OutletsList
     },
     data() {
         return {
-            showFilters: false,
             eventBus: EventBus,
             tags: null,
             center: this.$store.getters.getCenter
         }
     },
     computed: {
-        // ...mapGetters([
-        //     'getFilteredOutlets'
-        // ]),
         outlets() {
             return this.$store.getters.getFilteredOutlets(this.tags);
         }
     },
-    methods: {
-        toggleShowFilters() {
-            this.showFilters = !this.showFilters;
-        }
-    },
     created() {
-        this.eventBus.$on('changeShowFilters', this.toggleShowFilters); // тут общаются вью и хедер
         this.eventBus.$on('changeTags', (exportModel) => { // тут общаются вью и компонент фильтра
             this.tags = exportModel;
         });
