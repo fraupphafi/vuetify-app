@@ -6,17 +6,11 @@
             :color="'#204969'"
             dark
             >
-            <transition-group name="fade" mode="out-in" tag="div" class="group">
-                <v-app-bar-nav-icon v-show="showTitles" :key="1"></v-app-bar-nav-icon>
-           
-                <v-toolbar-title v-show="showTitles" :key="2">Заголовок</v-toolbar-title>
-          
-                <v-spacer v-show="showTitles" :key="3"></v-spacer>
-          
-                <CustomFilter v-show="showFilters" :tags="tags" :eventBus="eventBus" :key="4"/>
-            </transition-group>
+                <v-app-bar-nav-icon v-show="showTitles"></v-app-bar-nav-icon>
+                <v-toolbar-title v-show="showTitles">Заголовок</v-toolbar-title>
+                <v-spacer v-show="showTitles"></v-spacer>
+                <CustomFilter v-show="showFilters" :tags="tags" :eventBus="eventBus"/>
 
-           
             <v-btn icon
                 @click="toggleShowFilters()">
                 <v-icon>mdi-filter-variant</v-icon>

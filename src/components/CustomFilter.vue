@@ -25,6 +25,30 @@
                     {{ data.item }}
                 </v-chip>
             </template>
+
+
+            <template v-slot:item="{ item, attrs, on}">
+                <v-list-item 
+                    v-bind="attrs"
+                    v-on="on">
+
+                    <v-list-content>
+                        <div class="filter-name">
+                            <v-list-item-title
+                                :id="attrs"
+                                v-text="item"
+                            ></v-list-item-title>
+                        </div>
+
+                        <div class="filter-variant">
+                            variants
+                        </div>
+
+                    </v-list-content>
+                </v-list-item>
+
+
+            </template>
         </v-combobox>
     </div>
 </template>
